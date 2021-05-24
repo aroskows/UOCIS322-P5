@@ -33,15 +33,28 @@ def index():
     app.logger.debug("Main page entry")
     return flask.render_template('calc.html')
 
-@app.route("/submitroute")
-def submit():
-    pass
+@app.route("/submitroute", methods= ['POST'])
+def submitroute():
+    app.logger.debug("MADE IT TO SUB")
+    mydata = flask.request.get_json(force=True)
+    for row in mydata:
+        item_doc = {
+                'km': row[0],
+                'open_time': row[1],
+                'close_time': row[2]
+             }
+        app.logger.debug(item_doc) 
+        #app.logger.debug("km type", type(request.form['km']))
+        #app.logger.debug("km", request.form['km'])
+        db.tododb.insert_one(item_doc)
+    return redirect(url_for('index'))
 
 @app.route("/displayroute")
-def diplay():
+def diplayroute():
     app.logger.debug("DISPLAy")
-    hello  = 'hi'
-    return render_template('display.html', hello)
+    items = list(db.tododb.find())
+    app.logger.debug(items)
+    return render_template('display.html', items=list(db.tododb.find()))
 
 @app.errorhandler(404)
 def page_not_found(error):

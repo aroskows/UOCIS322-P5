@@ -1,4 +1,9 @@
 <html>
-	<h2> {{ data }} </h2>
+	{% for lists in items %}
+	<div>
+		<p>brevet: {{ lists.km }},  open: {{ lists.open_time }},  close: {{ lists.close_time }} </p>
+	
+	</div>
+	{% endfor %}
 </html>
 
