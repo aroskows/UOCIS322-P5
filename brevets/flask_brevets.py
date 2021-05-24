@@ -18,8 +18,8 @@ import logging
 # Globals
 ###
 app = flask.Flask(__name__)
-#client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
-#db = client.tododb
+client = MongoClient('mongodb://' + os.environ['MONGODB_HOSTNAME'], 27017)
+db = client.tododb
 CONFIG = config.configuration()
 
 ###
@@ -33,13 +33,23 @@ def index():
     app.logger.debug("Main page entry")
     return flask.render_template('calc.html')
 
+@app.route("/submitroute")
+def submit():
+    pass
+
+@app.route("/displayroute")
+def diplay():
+    app.logger.debug("DISPLAy")
+    hello  = 'hi'
+    return render_template('display.html', hello)
 
 @app.errorhandler(404)
 def page_not_found(error):
     app.logger.debug("Page not found")
     return flask.render_template('404.html'), 404
 
- 
+
+
 ###############
 #
 # AJAX request handlers
@@ -71,6 +81,7 @@ def _calc_times():
 
 
 #############
+
 
 app.debug = CONFIG.DEBUG
 if app.debug:
